@@ -45,6 +45,8 @@ export const manifestSchema = z.object({
     >,
   ),
   costo_total_usd: z.number().nonnegative().default(0),
+  /** /todo: encadena automáticamente 1→2→3 y se detiene en los puntos de aprobación. */
+  auto: z.boolean().default(false),
 });
 export type Manifest = z.infer<typeof manifestSchema>;
 

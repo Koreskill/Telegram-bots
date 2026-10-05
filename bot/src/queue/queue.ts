@@ -48,6 +48,10 @@ export class JobStore {
         chat_id INTEGER PRIMARY KEY,
         cliente TEXT, proyecto TEXT
       );
+      CREATE TABLE IF NOT EXISTS gastos (dia TEXT PRIMARY KEY, usd REAL NOT NULL DEFAULT 0);
+      CREATE TABLE IF NOT EXISTS pending (
+        chat_id INTEGER PRIMARY KEY, tipo TEXT NOT NULL, data TEXT NOT NULL DEFAULT '{}'
+      );
     `);
   }
 
@@ -140,6 +144,35 @@ export class JobStore {
          ON CONFLICT(chat_id) DO UPDATE SET cliente=excluded.cliente, proyecto=excluded.proyecto`,
       )
       .run(chatId, next.cliente, next.proyecto);
+  }
+
+  /** Gasto diario acumulado (USD, día UTC) para el tope MAX_USD_PER_DAY. */
+  addSpend(usd: number, now = new Date()): void {
+    const dia = now.toISOString().slice(0, 10);
+    this.db
+      .prepare("INSERT INTO gastos (dia, usd) VALUES (?, ?) ON CONFLICT(dia) DO UPDATE SET usd = usd + excluded.usd")
+      .run(dia, usd);
+  }
+
+  spentToday(now = new Date()): number {
+    const r = this.db.prepare("SELECT usd FROM gastos WHERE dia=?").get(now.toISOString().slice(0, 10)) as { usd: number } | undefined;
+    return r?.usd ?? 0;
+  }
+
+  /** Acción que espera la próxima respuesta de texto del usuario (editar prompt, cambios al plan…). */
+  setPending(chatId: number, tipo: string, data: Record<string, unknown> = {}): void {
+    this.db
+      .prepare("INSERT INTO pending (chat_id, tipo, data) VALUES (?,?,?) ON CONFLICT(chat_id) DO UPDATE SET tipo=excluded.tipo, data=excluded.data")
+      .run(chatId, tipo, JSON.stringify(data));
+  }
+
+  getPending(chatId: number): { tipo: string; data: Record<string, unknown> } | undefined {
+    const r = this.db.prepare("SELECT tipo, data FROM pending WHERE chat_id=?").get(chatId) as { tipo: string; data: string } | undefined;
+    return r && { tipo: r.tipo, data: JSON.parse(r.data) as Record<string, unknown> };
+  }
+
+  clearPending(chatId: number): void {
+    this.db.prepare("DELETE FROM pending WHERE chat_id=?").run(chatId);
   }
 
   close(): void {

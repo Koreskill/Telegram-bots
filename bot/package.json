@@ -16,9 +16,14 @@
     "set-webhook": "tsx scripts/set-webhook.ts"
   },
   "dependencies": {
+    "@remotion/captions": "^4.0.532",
+    "@remotion/install-whisper-cpp": "^4.0.532",
     "better-sqlite3": "^13.0.3",
+    "cheerio": "^1.2.0",
     "grammy": "^1.46.0",
     "pino": "^10.4.0",
+    "playwright-core": "^1.63.0",
+    "sharp": "^0.35.5",
     "zod": "^4.6.5"
   },
   "devDependencies": {

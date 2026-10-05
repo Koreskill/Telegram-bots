@@ -5,6 +5,14 @@ import { createPaths } from "./paths.js";
 import { JobStore, Worker } from "./queue/queue.js";
 import { createHttpServer } from "./http.js";
 import { createBot } from "./telegram/bot.js";
+import { createLlm } from "./llm/index.js";
+import { BrowserFetcher } from "./lib/browser.js";
+import { MockTranscriber, WhisperCppTranscriber } from "./lib/whisper.js";
+import { MockRenderer, RemotionCliRenderer } from "./agents/6-video.js";
+import { NoPublisher, ZernioPublisher } from "./agents/9-publicar.js";
+import { registerAgents } from "./agents/registry.js";
+import { TelegramSender } from "./telegram/send.js";
+import fs from "node:fs/promises";
 
 const log = pino({
   level: process.env.LOG_LEVEL ?? "info",
@@ -31,6 +39,24 @@ async function main() {
   });
   const realBot = createBot({ config, paths, store, worker });
   ref.bot = realBot;
+  await fs.mkdir(paths.clientesDir, { recursive: true });
+  await fs.mkdir(paths.estilosDir, { recursive: true });
+  registerAgents(
+    worker,
+    {
+      config,
+      paths,
+      store,
+      llm: createLlm(config),
+      fetcher: new BrowserFetcher(),
+      transcriber: config.MOCK ? new MockTranscriber() : new WhisperCppTranscriber(),
+      renderer: config.MOCK ? new MockRenderer() : new RemotionCliRenderer(),
+      publisher: config.ZERNIO_API_KEY ? new ZernioPublisher(config.ZERNIO_API_KEY) : new NoPublisher(),
+    },
+    store,
+    paths,
+    new TelegramSender(realBot.api, !!config.TELEGRAM_API_ROOT),
+  );
   await realBot.init(); // falla al arrancar (claro y temprano) si el token es inválido
   const recovered = store.recoverOnStart();
   worker.start();
