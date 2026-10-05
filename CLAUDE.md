@@ -18,8 +18,12 @@ Proyecto: bot de Telegram con 6 agentes (capturar → imágenes → prompts → 
 - Flujo: commits pequeños, tests pasando antes de avanzar de fase, desvíos del instructivo anotados en `docs/DECISIONES.md`. Modo `MOCK=1` para no gastar créditos en desarrollo.
 - No crees PRs ni hagas push sin que el usuario lo pida.
 
-## Comandos habituales (se completan en la Fase 1)
-- `cd bot && npm run dev` — bot en modo polling
-- `cd bot && npm test` — tests
+## Estado
+- Fase 1 (cimientos) implementada en `bot/`. Siguiente: Fase 0 (carpetas reales) y Fase 2 (agentes 1 y 2). Ver `docs/DECISIONES.md`.
+
+## Comandos habituales
+- `cd bot && cp ../.env.example .env` y completar; luego `npm run dev` — bot en modo polling
+- `cd bot && npm test` — tests (vitest) · `npm run typecheck` · `npm run build`
 - `cd bot && npm run check-models` — valida modelos y precios en OpenRouter
+- `cd bot && npm run set-webhook` — registra el webhook de Telegram (producción)
 - `cd my-video && npm run dev` — Remotion Studio
