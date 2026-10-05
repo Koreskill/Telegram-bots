@@ -1,0 +1,8 @@
+.git
+**/node_modules
+**/dist
+**/.env
+**/*.sqlite*
+my-video/out
+my-video/public/ejemplo.mp4
+data

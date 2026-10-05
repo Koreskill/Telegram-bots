@@ -2,9 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const here = path.dirname(fileURLToPath(import.meta.url));
-/** bot/skills (válido tanto desde src/ como desde dist/src/). */
-export const SKILLS_DIR = process.env.SKILLS_DIR ?? path.resolve(here, "../skills");
+/** Sube desde este archivo hasta encontrar bot/skills (funciona desde src/ y desde dist/src/). */
+function findSkillsDir(): string {
+  let d = path.dirname(fileURLToPath(import.meta.url));
+  for (let i = 0; i < 6; i++) {
+    const c = path.join(d, "skills");
+    if (fs.existsSync(path.join(c, "capturar", "SKILL.md"))) return c;
+    d = path.dirname(d);
+  }
+  throw new Error("No encuentro la carpeta skills/ (definí SKILLS_DIR)");
+}
+
+export const SKILLS_DIR = process.env.SKILLS_DIR ?? findSkillsDir();
 
 export interface Skill {
   id: string;

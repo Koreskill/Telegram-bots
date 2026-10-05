@@ -117,7 +117,7 @@ export const ESTILO_BASE: Estilo = {
   nombre: "base",
   paleta: { primario: "#0d2b1e", acento: "#b8f04a", fondo: "#000000", texto: "#ffffff" },
   tipografia: { titulos: "Inter", cuerpo: "Inter", subtitulos: "Inter" },
-  subtitulos: { posicion: "abajo", tamano_rel: 0.062, resaltado: "color", animacion: "pop", contorno: true, mayusculas: true },
+  subtitulos: { posicion: "abajo", tamano_rel: 0.042, resaltado: "color", animacion: "pop", contorno: true, mayusculas: true },
   transiciones: [{ tipo: "fade", duracion_s: 0.25 }],
   ritmo: { cortes_por_min: 20 },
   easing: { rigidez: 140, amortiguacion: 18 },

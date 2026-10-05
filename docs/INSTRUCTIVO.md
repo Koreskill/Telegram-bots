@@ -1,5 +1,9 @@
 # Instructivo de implementación — Bot de Telegram para agencia inmobiliaria
 
+> **Estado (2026-10-05):** las Fases 1–9 ya están implementadas en este repositorio. Este documento queda como plan
+> de referencia; lo vigente está en `README.md`, `docs/AGENTES.md`, `docs/ESTRUCTURA.md` y `docs/DESPLIEGUE.md`.
+> Desvíos respecto de este plan (p. ej. whisper.cpp en CPU, extracción determinista de imágenes) en `docs/DECISIONES.md`.
+
 > Documento para ejecutar con **Claude Code local**. Está pensado para trabajarse **fase por fase**.
 > Cada fase tiene: objetivo, un **prompt listo para pegar**, pasos técnicos, y **criterios de aceptación**.
 > No avances a la siguiente fase hasta cumplir los criterios de la actual.

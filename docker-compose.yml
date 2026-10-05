@@ -1,0 +1,38 @@
+# Despliegue en Dokploy (tipo "Docker Compose", origen GitHub). Las variables se cargan desde la
+# pestaña Environment del servicio (ver .env.example). Guía completa: docs/DESPLIEGUE.md
+services:
+  telegram-bot-api:
+    image: aiogram/telegram-bot-api:latest
+    restart: unless-stopped
+    environment:
+      TELEGRAM_API_ID: ${TELEGRAM_API_ID}
+      TELEGRAM_API_HASH: ${TELEGRAM_API_HASH}
+      TELEGRAM_LOCAL: "1"
+    volumes:
+      - tgdata:/var/lib/telegram-bot-api
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - telegram-bot-api
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      TELEGRAM_API_ROOT: http://telegram-bot-api:8081
+      DATA_DIR: /data
+    volumes:
+      # Tu carpeta real con clientes/ y plantilla/ (ajustá la ruta del VPS)
+      - ${DATA_HOST_DIR:-/srv/agencia}:/data
+      # Archivos que el servidor local de Telegram descarga (para leerlos desde el bot)
+      - tgdata:/var/lib/telegram-bot-api
+    deploy:
+      resources:
+        limits:
+          memory: 6g
+
+volumes:
+  tgdata:

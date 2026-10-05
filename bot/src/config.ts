@@ -41,6 +41,8 @@ const schema = z
     MAX_USD_PER_PROJECT: num(5),
     MAX_USD_PER_DAY: num(20),
     WHISPER_MODEL: z.string().default("medium"),
+    /** Dónde vive whisper.cpp compilado + modelo (por defecto DATA_DIR/whisper; en Docker se precalienta en la imagen). */
+    WHISPER_DIR: z.string().default(""),
     RENDER_CONCURRENCY: num(2),
     ZERNIO_API_KEY: z.string().default(""),
   })

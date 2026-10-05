@@ -13,7 +13,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "check-models": "tsx scripts/check-models.ts",
-    "set-webhook": "tsx scripts/set-webhook.ts"
+    "set-webhook": "tsx scripts/set-webhook.ts",
+    "init-data": "tsx scripts/init-data.ts",
+    "prewarm-whisper": "tsx scripts/prewarm-whisper.ts",
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@remotion/captions": "^4.0.532",

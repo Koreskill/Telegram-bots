@@ -146,7 +146,7 @@ async function transcribir(ctx: AgentContext, trabajo: string, tieneAudio: boole
   const bruta = await ctx.transcriber.transcribe(wav, {
     idioma: cli.idioma,
     modelo: ctx.config.WHISPER_MODEL,
-    dir: path.join(paths.root, "whisper"),
+    dir: ctx.config.WHISPER_DIR || path.join(paths.root, "whisper"),
     signal: ctx.signal,
     onProgress: (p) => ctx.progress(`🎧 Transcribiendo… ${Math.round(p * 100)}%`),
   });

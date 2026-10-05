@@ -19,11 +19,15 @@ Proyecto: bot de Telegram con 6 agentes (capturar → imágenes → prompts → 
 - No crees PRs ni hagas push sin que el usuario lo pida.
 
 ## Estado
-- Fase 1 (cimientos) implementada en `bot/`. Siguiente: Fase 0 (carpetas reales) y Fase 2 (agentes 1 y 2). Ver `docs/DECISIONES.md`.
+- Implementado: cimientos + agentes 1–9 + skills + triggers + composición Remotion + Docker/CI. Ver `README.md`, `docs/AGENTES.md`, `docs/ESTRUCTURA.md`.
+- Pendiente de verificar con credenciales reales: OpenRouter (imagen/voz/JSON estricto), Telegram en vivo, whisper.cpp, Zernio, build de Docker. Ver `docs/DECISIONES.md` §"Qué NO se pudo verificar".
+- Fase 0 (carpetas reales del usuario) sigue pendiente: `bot/src/paths.ts` implementa la estructura objetivo.
+- Cada agente tiene su skill en `bot/skills/<id>/SKILL.md` (prompts editables sin tocar código).
 
 ## Comandos habituales
 - `cd bot && cp ../.env.example .env` y completar; luego `npm run dev` — bot en modo polling
 - `cd bot && npm test` — tests (vitest) · `npm run typecheck` · `npm run build`
 - `cd bot && npm run check-models` — valida modelos y precios en OpenRouter
 - `cd bot && npm run set-webhook` — registra el webhook de Telegram (producción)
-- `cd my-video && npm run dev` — Remotion Studio
+- `cd bot && npm run init-data` — crea la estructura de clientes/plantilla de ejemplo en DATA_DIR
+- `cd my-video && npm run dev` — Remotion Studio · `npm run lint` (eslint + tsc)
